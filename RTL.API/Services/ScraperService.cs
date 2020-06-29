@@ -59,8 +59,7 @@ namespace RTL.API.Services
                             await rateLimiter.WaitAsync();
                             try
                             {
-
-                                var showResponse = _client.GetAsync($"https://api.tvmaze.com/shows/{x}?embed=cast").Result.Content.ReadAsStringAsync().Result;
+                                var showResponse = _client.GetAsync($"https://api.tvmaze.com/shows/{showId}?embed=cast").Result.Content.ReadAsStringAsync().Result;
 
                                 JObject showJson = JObject.Parse(showResponse);
                                 var show = showJson.ToObject<Show>();
