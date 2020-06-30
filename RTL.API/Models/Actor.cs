@@ -12,7 +12,6 @@ namespace RTL.API.Models
         [JsonProperty("name")]
         public string ActorName { get; set; }
 
-        //[JsonConverter(typeof(IsoDateTimeConverter))]
         public DateTime? BirthDay { get; set; }
     }
 }
