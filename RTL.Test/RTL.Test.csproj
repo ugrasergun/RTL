@@ -26,6 +26,21 @@
     <None Update="TestCases\Parser\Should_Parse_Correctly_With_Null_Birthday.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="TestCases\Scraper\0001.GetOneShow.Updates.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestCases\Scraper\0002.GetTwoShows.Updates.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestCases\Scraper\0004.GetOneShowExistingUpToDate.Updates.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestCases\Scraper\0003.GetOneShowExisting.Updates.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestCases\Scraper\ShowData.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>

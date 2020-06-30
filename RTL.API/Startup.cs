@@ -33,7 +33,7 @@ namespace RTL.API
 
             services.AddSingleton<IRTLDBSettings>(sp => sp.GetRequiredService<IOptions<RTLDBSettings>>().Value);
 
-            services.AddSingleton<ShowService>();
+            services.AddSingleton<IShowService, ShowService>();
 
             services.AddSingleton<HttpClient>();
 

@@ -7,6 +7,7 @@ using Newtonsoft.Json.Linq;
 using RTL.API.Models;
 using RTL.API.Models.Parsers;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Threading;
@@ -18,7 +19,7 @@ namespace RTL.API.Services
     {
         private Timer _timer;
         private HttpClient _client;
-        private readonly ShowService _showService;
+        private readonly IShowService _showService;
         private readonly ILogger _logger;
         private IConfiguration _configuration;
         private ShowParser _parser;
@@ -27,7 +28,7 @@ namespace RTL.API.Services
         private static object _lockObject = new object();
 
 
-        public ScraperService(HttpClient client, ShowService showService, ILogger<ScraperService> logger, IConfiguration configuration, ShowParser parser)
+        public ScraperService(HttpClient client, IShowService showService, ILogger<ScraperService> logger, IConfiguration configuration, ShowParser parser)
         {
             _client = client;
             _showService = showService;
@@ -45,7 +46,7 @@ namespace RTL.API.Services
             return Task.CompletedTask;
         }
 
-        private void DoWork(object state)
+        public void DoWork(object state)
         {
             bool locked = false;
             try
@@ -59,6 +60,7 @@ namespace RTL.API.Services
                     var APISection = _configuration.GetSection("Shows:API");
                     var maxRequest = (int)APISection.GetValue(typeof(int), "MaxRequestNumber");
                     SemaphoreSlim rateLimiter = new SemaphoreSlim(maxRequest);
+                    var tasks = new List<Task>();
 
                     var updatesResponse = _client.GetAsync(APISection.GetSection("Domain").Value + APISection.GetSection("UpdatesAPI").Value).Result;
                     if (updatesResponse.StatusCode != System.Net.HttpStatusCode.OK)
@@ -73,12 +75,12 @@ namespace RTL.API.Services
                         var showId = int.Parse(update.Name);
                         var LastUpdateTime = UnixEpoch.AddSeconds((long)((JValue)update.Value).Value);
                         var localShow = _showService.GetShowByShowId(showId);
-                        if (localShow?.LastUpdateTime == LastUpdateTime)
+                        if (localShow?.LastUpdateTime >= LastUpdateTime)
                         {
                             _logger.LogInformation($"Show \"{localShow.ShowName}\" is already up to date");
                             continue;
                         }
-                        Task.Run(async () =>
+                        var task = Task.Run(async () =>
                         {
                             await rateLimiter.WaitAsync();
                             try
@@ -109,9 +111,11 @@ namespace RTL.API.Services
                                 rateLimiter.Release();
                             }
                         });
+                        tasks.Add(task);
                     }
-                    
+                    Task.WhenAll(tasks).Wait();
                 }
+
             }
             catch (Exception ex)
             {

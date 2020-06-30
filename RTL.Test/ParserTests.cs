@@ -10,12 +10,6 @@ namespace RTL.Test
     {
         ShowParser parser = new ShowParser();
 
-        [SetUp]
-        public void Setup()
-        {
-
-        }
-
         [Test]
         public void Should_Parse_Correctly()
         {

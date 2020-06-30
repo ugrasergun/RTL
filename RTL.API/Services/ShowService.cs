@@ -8,7 +8,15 @@ using System.Threading.Tasks;
 
 namespace RTL.API.Services
 {
-    public class ShowService
+    public interface IShowService
+    {
+        void Create(Show show);
+        Show GetShowByShowId(int showId);
+        List<Show> GetShowsByPage(int pageNumber, int pageSize);
+        void Update(string id, Show show);
+        void Upsert(Show show);
+    }
+    public class ShowService : IShowService
     {
         private readonly IMongoCollection<Show> _shows;
 
@@ -36,7 +44,7 @@ namespace RTL.API.Services
             _shows.InsertOne(show);
         }
 
-        public void Update(string id,Show show)
+        public void Update(string id, Show show)
         {
             _shows.ReplaceOne(s => s.Id == id, show);
         }
@@ -45,7 +53,7 @@ namespace RTL.API.Services
         {
             var existingShow = GetShowByShowId(show.ShowId);
 
-            if(existingShow == null)
+            if (existingShow == null)
             {
                 Create(show);
             }
