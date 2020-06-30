@@ -5,6 +5,7 @@ using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using RTL.API.Models;
+using RTL.API.Models.Parsers;
 using System;
 using System.Linq;
 using System.Net.Http;
@@ -20,17 +21,19 @@ namespace RTL.API.Services
         private readonly ShowService _showService;
         private readonly ILogger _logger;
         private IConfiguration _configuration;
+        private ShowParser _parser;
 
         private static readonly DateTime UnixEpoch = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
         private static object _lockObject = new object();
 
 
-        public ScraperService(HttpClient client, ShowService showService, ILogger<ScraperService> logger, IConfiguration configuration)
+        public ScraperService(HttpClient client, ShowService showService, ILogger<ScraperService> logger, IConfiguration configuration, ShowParser parser)
         {
             _client = client;
             _showService = showService;
             _logger = logger;
             _configuration = configuration;
+            _parser = parser;
         }
 
         public Task StartAsync(CancellationToken cancellationToken)
@@ -90,10 +93,7 @@ namespace RTL.API.Services
 
                                 var showContent = await showResponse.Content.ReadAsStringAsync();
 
-                                JObject showJson = JObject.Parse(showContent);
-                                var show = showJson.ToObject<Show>();
-                                var cast = showJson.Value<JObject>("_embedded")?.Value<JArray>("cast").Select(c => c.SelectToken("person").ToObject<JObject>().ToObject<Actor>()).ToList();
-                                show.Cast = cast;
+                                var show = _parser.ParseShowFromJSON(showContent);
 
                                 _showService.Upsert(show);
                                 _logger.LogInformation($"\"{show.ShowName}\" has been inserted/updated");

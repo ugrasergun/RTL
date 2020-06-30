@@ -12,6 +12,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using RTL.API.Models;
+using RTL.API.Models.Parsers;
 using RTL.API.Services;
 
 namespace RTL.API
@@ -35,6 +36,8 @@ namespace RTL.API
             services.AddSingleton<ShowService>();
 
             services.AddSingleton<HttpClient>();
+
+            services.AddSingleton<ShowParser>();
 
             services.AddSwaggerGen();
 
