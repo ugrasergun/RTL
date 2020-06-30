@@ -51,6 +51,7 @@ namespace RTL.API.Services
             }
             else
             {
+                show.Id = existingShow.Id;
                 Update(existingShow.Id, show);
             }
         }

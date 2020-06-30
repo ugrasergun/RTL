@@ -38,6 +38,8 @@ namespace RTL.API
 
             services.AddSwaggerGen();
 
+            services.AddSwaggerGenNewtonsoftSupport();
+
             services.AddHostedService<ScraperService>();
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);

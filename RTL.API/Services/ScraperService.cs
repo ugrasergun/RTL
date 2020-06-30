@@ -80,7 +80,7 @@ namespace RTL.API.Services
                             await rateLimiter.WaitAsync();
                             try
                             {
-                                var showResponse = await _client.GetAsync(string.Format(APISection.GetSection("Domain").Value + APISection.GetSection("UpdatesAPI").Value, showId));
+                                var showResponse = await _client.GetAsync(string.Format(APISection.GetSection("Domain").Value + APISection.GetSection("ShowAPI").Value, showId));
 
                                 if (updatesResponse.StatusCode != System.Net.HttpStatusCode.OK)
                                 {
@@ -96,6 +96,7 @@ namespace RTL.API.Services
                                 show.Cast = cast;
 
                                 _showService.Upsert(show);
+                                _logger.LogInformation($"\"{show.ShowName}\" has been inserted/updated");
                             }
                             catch (Exception ex)
                             {

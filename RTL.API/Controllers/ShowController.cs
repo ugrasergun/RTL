@@ -20,21 +20,15 @@ namespace RTL.API.Controllers
             _showService = showService;
         }
 
-        [HttpGet(Name = "GetShow")]
-        public ActionResult<Show> GetShow(int showId)
+        [HttpGet(Name = "GetShows")]
+        public ActionResult<List<Show>> GetShow(int pageNumber, int pageSize)
         {
-            var show = _showService.GetShowByShowId(showId);
+            var shows = _showService.GetShowsByPage(pageNumber, pageSize);
 
-            if(show == null)
+            if(shows == null)
                 return NotFound();
 
-            return show;
-        }
-
-        [HttpPost]
-        public void Create(Show show)
-        {
-            _showService.Create(show);
+            return shows;
         }
     }
 }
