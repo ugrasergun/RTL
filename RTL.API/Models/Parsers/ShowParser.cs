@@ -13,7 +13,7 @@ namespace RTL.API.Models.Parsers
             JObject showJson = JObject.Parse(jsonStr);
             var show = showJson.ToObject<Show>();
             var cast = showJson.Value<JObject>("_embedded")?.Value<JArray>("cast").Select(c => c.SelectToken("person").ToObject<JObject>().ToObject<Actor>()).ToList();
-            show.Cast = cast;
+            show.Cast = cast?.OrderByDescending(c=> c.BirthDay ?? DateTime.MinValue).ToList();
 
             return show;
         }

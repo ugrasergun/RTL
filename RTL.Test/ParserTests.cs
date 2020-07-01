@@ -21,7 +21,7 @@ namespace RTL.Test
             Assert.AreEqual("Under the Dome", show.ShowName);
             Assert.AreEqual(15, show.Cast.Count);
             Assert.True(show.Cast.Any(c => c.ActorId == 1));
-            Assert.AreEqual("Mike Vogel", show.Cast.Where(c => c.ActorId == 1).FirstOrDefault().ActorName);
+            Assert.AreEqual("Mackenzie Lintz", show.Cast[0].ActorName);
         }
 
         [Test]
