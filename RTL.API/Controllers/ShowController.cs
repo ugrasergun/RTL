@@ -13,9 +13,9 @@ namespace RTL.API.Controllers
     [ApiController]
     public class ShowController : ControllerBase
     {
-        private readonly ShowService _showService;
+        private readonly IShowService _showService;
 
-        public ShowController(ShowService showService)
+        public ShowController(IShowService showService)
         {
             _showService = showService;
         }

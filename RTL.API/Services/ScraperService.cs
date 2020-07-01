@@ -53,8 +53,6 @@ namespace RTL.API.Services
             {
                 locked = Monitor.TryEnter(_lockObject);
 
-                
-
                 if (locked)
                 {
                     var APISection = _configuration.GetSection("Shows:API");
