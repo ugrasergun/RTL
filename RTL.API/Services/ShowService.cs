@@ -1,10 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc.RazorPages;
-using MongoDB.Driver;
+﻿using MongoDB.Driver;
 using RTL.API.Models;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace RTL.API.Services
 {

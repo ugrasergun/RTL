@@ -1,8 +1,6 @@
 ﻿using Newtonsoft.Json.Linq;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace RTL.API.Models.Parsers
 {
@@ -12,7 +10,7 @@ namespace RTL.API.Models.Parsers
         {
             JObject showJson = JObject.Parse(jsonStr);
             var show = showJson.ToObject<Show>();
-            var cast = showJson.Value<JObject>("_embedded")?.Value<JArray>("cast").Select(c => c.SelectToken("person").ToObject<JObject>().ToObject<Actor>()).ToList();
+            var cast = showJson.Value<JObject>("_embedded")?.Value<JArray>("cast").Select(c => c.SelectToken("person").ToObject<JObject>().ToObject<Actor>());
             show.Cast = cast?.OrderByDescending(c=> c.BirthDay ?? DateTime.MinValue).ToList();
 
             return show;

@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace RTL.API.Models
+﻿namespace RTL.API.Models
 {
     public class RTLDBSettings : IRTLDBSettings
     {
